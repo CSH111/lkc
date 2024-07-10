@@ -12,7 +12,7 @@ export default function RecentList(props: { transactionData?: TransActionData[] 
 
   return (
     <RecentListSectionContainer>
-      <h3>Recent TransActions</h3>
+      <h3>Recent Transactions</h3>
       <div>
         <TransactionTypeFilter
           originalTransactionData={transActionData}

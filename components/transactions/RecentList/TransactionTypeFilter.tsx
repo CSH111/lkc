@@ -17,21 +17,23 @@ export default function TransactionTypeFilter(props: {
     transactionTypeFilterValue: TransActionTypeFilterType
   ) => {
     setTransactionTypeFilterValue(transactionTypeFilterValue);
-    console.log("filter run");
     props.setFilterdTransactionData(() => {
-      return props.originalTransactionData.filter((d) => {
-        switch (transactionTypeFilterValue) {
-          case "expense": {
-            return Number(d.amount) < 0;
+      return props.originalTransactionData
+        .filter((d) => {
+          switch (transactionTypeFilterValue) {
+            case "expense": {
+              return Number(d.amount) < 0;
+            }
+            case "income": {
+              return Number(d.amount) >= 0;
+            }
+            case "all":
+            default: {
+              return 1;
+            }
           }
-          case "income": {
-            return Number(d.amount) >= 0;
-          }
-          default: {
-            return 1;
-          }
-        }
-      });
+        })
+        .slice(0, transactionTypeFilterValue == "all" ? 20 : 10);
     });
   };
   return (
