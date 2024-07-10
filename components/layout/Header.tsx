@@ -12,13 +12,6 @@ function Header(props: { title?: string }) {
 export default Header;
 
 const HeaderContainer = styled.header`
-  /* position: fixed;
-  right: 0;
-  top: 0;
-  width: 100%; */
-  /* height: 100px; */
-  /* height: 70px;
-  padding: 17.5px; */
   height: 35px;
   display: flex;
   justify-content: space-between;

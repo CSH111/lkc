@@ -16,13 +16,18 @@ export default function Layout(props: { children: ReactNode; pageProps: AppPageP
 }
 
 const LayoutConatiner = styled.div`
-  padding: 17.5px;
+  padding: 25px;
   display: flex;
   flex-direction: column;
   gap: 10px;
   height: 100vh;
   .content-container {
+    &::-webkit-scrollbar {
+      width: 0 !important;
+    }
+    overflow: -moz-scrollbars-none;
     overflow-y: auto;
+    -ms-overflow-style: none;
     height: calc((100vh - 90px));
   }
 `;
