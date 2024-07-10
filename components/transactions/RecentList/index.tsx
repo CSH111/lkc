@@ -4,9 +4,8 @@ import TransActionListItem from "./TransActionListItem";
 import TransactionTypeFilter from "./TransactionTypeFilter";
 
 import styled from "styled-components";
-export default function RecentList(props: { transactionData?: TransActionData[] }) {
+export default function RecentList(props: { transactionData: TransActionData[] }) {
   console.log("props.transactionData: ", props.transactionData);
-  const [transActionData, setTransActionData] = useState(props.transactionData);
 
   const [filterdTransactionData, setFilterdTransactionData] = useState(props.transactionData);
 
@@ -15,7 +14,7 @@ export default function RecentList(props: { transactionData?: TransActionData[] 
       <h3>Recent Transactions</h3>
       <div>
         <TransactionTypeFilter
-          originalTransactionData={transActionData}
+          originalTransactionData={props.transactionData}
           setFilterdTransactionData={setFilterdTransactionData}
         />
       </div>

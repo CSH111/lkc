@@ -1,6 +1,6 @@
 import { TransActionData, TransActionTypeFilterType } from "@/types";
 import { capitalizeFirstLetter } from "@/utils";
-import { MouseEvent, useState } from "react";
+import { MouseEvent, useEffect, useState } from "react";
 import styled from "styled-components";
 
 const transActionTypeFilterValues: TransActionTypeFilterType[] = ["all", "expense", "income"];
@@ -12,15 +12,15 @@ export default function TransactionTypeFilter(props: {
   const [transactionTypeFilterValue, setTransactionTypeFilterValue] =
     useState<TransActionTypeFilterType>("all");
 
-  const handleClickFilterButton = (
-    e: MouseEvent<HTMLButtonElement>,
-    transactionTypeFilterValue: TransActionTypeFilterType
-  ) => {
-    setTransactionTypeFilterValue(transactionTypeFilterValue);
+  useEffect(() => {
+    runFilter(transactionTypeFilterValue);
+  }, []);
+
+  const runFilter = (type: TransActionTypeFilterType) => {
     props.setFilterdTransactionData(() => {
       return props.originalTransactionData
         .filter((d) => {
-          switch (transactionTypeFilterValue) {
+          switch (type) {
             case "expense": {
               return Number(d.amount) < 0;
             }
@@ -33,8 +33,15 @@ export default function TransactionTypeFilter(props: {
             }
           }
         })
-        .slice(0, transactionTypeFilterValue == "all" ? 20 : 10);
+        .slice(0, type == "all" ? 20 : 10);
     });
+  };
+  const handleClickFilterButton = (
+    e: MouseEvent<HTMLButtonElement>,
+    transactionTypeFilterValue: TransActionTypeFilterType
+  ) => {
+    setTransactionTypeFilterValue(transactionTypeFilterValue);
+    runFilter(transactionTypeFilterValue);
   };
   return (
     <TransactionTypeFilterStyles.Container>
