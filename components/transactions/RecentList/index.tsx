@@ -5,8 +5,6 @@ import TransactionTypeFilter from "./TransactionTypeFilter";
 
 import styled from "styled-components";
 export default function RecentList(props: { transactionData: TransActionData[] }) {
-  console.log("props.transactionData: ", props.transactionData);
-
   const [filterdTransactionData, setFilterdTransactionData] = useState(props.transactionData);
 
   return (

@@ -6,6 +6,7 @@ import { GetServerSidePropsType } from "@/types";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { TransActionData } from "@/types";
+import TransactionChart from "@/components/transactions/transactionChart";
 export const getServerSideProps: GetServerSidePropsType<{ data: string }> = async () => {
   return { props: { pageName: "transactions", data: "any.." } };
 };
@@ -17,9 +18,18 @@ export default function Home() {
     (async () => {
       const res = await axios.get("/api/mock-transactions");
       setTransactionData(res.data.data);
-      console.log("res.data.data: ", res.data.data);
     })();
   }, []);
 
-  return <div> {transactionData ? <RecentList transactionData={transactionData} /> : null} </div>;
+  return (
+    <div>
+      {" "}
+      {transactionData ? (
+        <>
+          <TransactionChart transactionData={transactionData} />
+          <RecentList transactionData={transactionData} />
+        </>
+      ) : null}{" "}
+    </div>
+  );
 }

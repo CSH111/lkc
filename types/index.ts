@@ -9,6 +9,7 @@ export type AppPagePropType = { pageName: PageName };
 export type StaticPageData = { [key in PageName]: { title: string } };
 
 export type TransActionTypeFilterType = "all" | "expense" | "income";
+export type TransActionChartFilterType = "month" | "week";
 
 export type TransActionData = {
   amount: string;
