@@ -8,7 +8,7 @@ import Header from "./Header";
 export default function Layout(props: { children: ReactNode; pageProps: AppPagePropType }) {
   return (
     <LayoutConatiner>
-      <Header title={staticPageData[props.pageProps.pageName].title} />
+      <Header title={staticPageData[props.pageProps.pageName]?.title} />
       <div className="content-container">{props.children}</div>
       <Bottom />
     </LayoutConatiner>

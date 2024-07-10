@@ -7,3 +7,10 @@ export type GetServerSidePropsType<T = {}> = GetServerSideProps<{ pageName: Page
 export type AppPagePropType = { pageName: PageName };
 
 export type StaticPageData = { [key in PageName]: { title: string } };
+
+export type TransActionData = {
+  amount: string;
+  name: string;
+  timestamp: string;
+  type: string;
+};
