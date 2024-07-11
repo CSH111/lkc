@@ -13,11 +13,16 @@ export const getServerSideProps: GetServerSidePropsType<{ data: string }> = asyn
 
 export default function Home() {
   const [transactionData, setTransactionData] = useState<TransActionData[]>();
+  const [transactionListData, setTransactionListData] = useState<TransActionData[]>();
 
   useEffect(() => {
     (async () => {
-      const res = await axios.get("/api/mock-transactions");
+      const [res, res2] = await Promise.all([
+        axios.get("/api/mock-transactions"),
+        axios.get("/api/transactions"),
+      ]);
       setTransactionData(res.data.data);
+      setTransactionListData(res2.data.data);
     })();
   }, []);
 
@@ -27,7 +32,7 @@ export default function Home() {
       {transactionData ? (
         <>
           <TransactionChart transactionData={transactionData} />
-          <RecentList transactionData={transactionData} />
+          <RecentList transactionData={transactionListData} />
         </>
       ) : null}{" "}
     </div>

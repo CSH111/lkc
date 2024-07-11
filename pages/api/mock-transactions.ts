@@ -3,5 +3,9 @@ import jsonData from "../../mockdata.json";
 
 export default function handler(req: NextApiRequest, res: NextApiResponse<any>) {
   const data: any = jsonData;
-  res.status(200).json({ data: data.slice(data.length - 10000, data.length - 1).reverse() });
+  req.query.month;
+  req.query.week;
+  const slicedData = data.slice(data.length - 100, data.length);
+  // const slicedData = data.slice(data.length - 100, data.length).reverse();
+  res.status(200).json({ data: slicedData });
 }

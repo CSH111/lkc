@@ -20,7 +20,7 @@ export default function RecentList(props: { transactionData: TransActionData[] }
         <ul className="transaction-list">
           {filterdTransactionData?.map((trData) => {
             return (
-              <React.Fragment>
+              <React.Fragment key={`${trData.name}-${trData.timestamp}-${trData.amount}`}>
                 <TransActionListItem
                   amount={Number(trData.amount)}
                   imgSrc=""

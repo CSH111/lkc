@@ -1,4 +1,4 @@
-import React, { useState, MouseEvent, useEffect } from "react";
+import React, { useState, MouseEvent, useEffect, useMemo } from "react";
 import styled from "styled-components";
 import { TransActionData, TransActionChartFilterType } from "@/types";
 import { addDay, addMonth, capitalizeFirstLetter } from "@/utils";
@@ -6,37 +6,37 @@ import { addDay, addMonth, capitalizeFirstLetter } from "@/utils";
 const chartFilterValues: TransActionChartFilterType[] = ["week", "month"];
 
 export default function ChartFilter(props: {
-  originalTransactionData: TransActionData[];
-  setFilterdTransactionData: React.Dispatch<React.SetStateAction<TransActionData[]>>;
+  chartFilterValue: TransActionChartFilterType;
+  setChartFilterValue: React.Dispatch<React.SetStateAction<TransActionChartFilterType>>;
+  // originalTransactionData: TransActionData[];
+  // setFilterdTransactionData: React.Dispatch<React.SetStateAction<TransActionData[]>>;
 }) {
-  const today = new Date("2024-10-31"); // TODO 실데이터반영시 수정필요
-  const [chartFilterValue, setChartFilterValue] = useState<TransActionChartFilterType>("month");
+  const now = new Date("2024-10-31T23:59:59Z"); // TODO 실데이터반영시 수정필요
 
-  useEffect(() => {
-    runFilter("month");
-  }, []);
+  // useEffect(() => {
+  //   runFilter("month");
+  // }, []);
 
-  const runFilter = (type: TransActionChartFilterType) => {
-    props.setFilterdTransactionData(() => {
-      return props.originalTransactionData.filter((d) => {
-        switch (type) {
-          case "month": {
-            return new Date(d.timestamp).getMonth() === today.getMonth();
-          }
-          case "week":
-          default: {
-            return new Date(d.timestamp) >= addDay(today, -6);
-          }
-        }
-      });
-    });
-  };
+  // const runFilter = (type: TransActionChartFilterType) => {
+  //   props.setFilterdTransactionData(() => {
+  //     return props.originalTransactionData.filter((d) => {
+  //       switch (type) {
+  //         case "month": {
+  //           return new Date(d.timestamp).getMonth() === now.getMonth();
+  //         }
+  //         case "week":
+  //         default: {
+  //           return new Date(d.timestamp) >= addDay(now, -6);
+  //         }
+  //       }
+  //     });
+  //   });
+  // };
   const handleClickFilterButton = (
     e: MouseEvent<HTMLButtonElement>,
     chartFilterValue: TransActionChartFilterType
   ) => {
-    setChartFilterValue(chartFilterValue);
-    runFilter(chartFilterValue);
+    props.setChartFilterValue(chartFilterValue);
   };
   return (
     <ChartFilterStyles.Container>
@@ -45,7 +45,7 @@ export default function ChartFilter(props: {
           return (
             <ChartFilterStyles.Button
               key={value}
-              $isActive={value == chartFilterValue}
+              $isActive={value == props.chartFilterValue}
               onClick={(e) => handleClickFilterButton(e, value)}
             >
               {capitalizeFirstLetter(value)}
@@ -56,13 +56,14 @@ export default function ChartFilter(props: {
 
       <div className="date">
         {(() => {
-          switch (chartFilterValue) {
+          switch (props.chartFilterValue) {
             case "week": {
               return (
                 <div>
-                  {today.toLocaleString("en-US", {
+                  {now.toLocaleString("en-US", {
                     month: "short",
-                    day: "numeric",
+                    day: "2-digit",
+
                     year: "numeric",
                   })}
                 </div>
@@ -73,16 +74,16 @@ export default function ChartFilter(props: {
               return (
                 <div className="month-dates">
                   <div>
-                    {today.toLocaleString("en-US", {
+                    {addMonth(now, -1).toLocaleString("en-US", {
                       month: "short",
-                      day: "numeric",
+                      day: "2-digit",
                     })}
                   </div>
                   {"-"}
                   <div>
-                    {addMonth(today, -1).toLocaleString("en-US", {
+                    {now.toLocaleString("en-US", {
                       month: "short",
-                      day: "numeric",
+                      day: "2-digit",
                       year: "numeric",
                     })}
                   </div>

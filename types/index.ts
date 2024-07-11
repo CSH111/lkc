@@ -17,3 +17,7 @@ export type TransActionData = {
   timestamp: string;
   type: string;
 };
+
+export type ChartDataType = {
+  [key in string]: { income: number; expense: number };
+};

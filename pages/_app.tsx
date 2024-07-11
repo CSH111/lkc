@@ -14,6 +14,9 @@ const GlobalStyle = createGlobalStyle`
     padding: 0;
     box-sizing: border-box;
   }
+  section {
+    margin:10px 0px;
+  }
 `;
 
 interface ThemeInterface {

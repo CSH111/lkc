@@ -18,22 +18,23 @@ export default function TransactionTypeFilter(props: {
 
   const runFilter = (type: TransActionTypeFilterType) => {
     props.setFilterdTransactionData(() => {
-      return props.originalTransactionData
-        .filter((d) => {
-          switch (type) {
-            case "expense": {
-              return Number(d.amount) < 0;
-            }
-            case "income": {
-              return Number(d.amount) >= 0;
-            }
-            case "all":
-            default: {
-              return 1;
-            }
+      const filtered = props.originalTransactionData.filter((d) => {
+        switch (type) {
+          case "expense": {
+            return Number(d.amount) < 0;
           }
-        })
-        .slice(0, type == "all" ? 20 : 10);
+          case "income": {
+            return Number(d.amount) >= 0;
+          }
+          case "all":
+          default: {
+            return 1;
+          }
+        }
+      });
+      const sliced = filtered.slice(0, type == "all" ? 20 : 10);
+
+      return sliced;
     });
   };
   const handleClickFilterButton = (
