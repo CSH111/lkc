@@ -1,58 +1,42 @@
 import { ChartDataType, TransActionData } from "@/types";
 import React, { useMemo } from "react";
-import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  Legend,
+  TooltipProps,
+} from "recharts";
+import { ValueType, NameType } from "recharts/types/component/DefaultTooltipContent";
+import styled from "styled-components";
 
-const CustomTooltip = ({ active, payload, label }) => {
-  if (active && payload && payload.length) {
+const CustomTooltip = ({ active, payload, label }: TooltipProps<ValueType, NameType>) => {
+  if (active) {
     return (
-      <div className="custom-tooltip">
-        <p className="label">{`${label} : ${payload[0].value}`}</p>
-        <p className="intro">{label}</p>
-        <p className="desc">Anything you want can be displayed here.</p>
-      </div>
+      <TooltipContainer>
+        <p className="income">{`+$${payload?.[0].value.toLocaleString()}`}</p>
+        <p className="expense">{`-$${payload?.[1].value.toLocaleString()}`}</p>
+        <p className="date">
+          {new Date(label).toLocaleString("en-US", {
+            month: "short",
+            day: "2-digit",
+          })}
+        </p>
+      </TooltipContainer>
     );
   }
-
-  return null;
 };
 
-// const data2 = [
-//   {
-//     name2: 1.5,
-//     uv: 4000,
-//   },
-//   {
-//     name2: 2.5,
-//     uv: 3000,
-//   },
-//   {
-//     name2: 3.5,
-//     uv: 2000,
-//   },
-//   {
-//     name2: 4.5,
-//     uv: 2780,
-//   },
-//   {
-//     name2: 5.5,
-//     uv: 1890,
-//   },
-//   {
-//     name2: 6.5,
-//     uv: 2390,
-//   },
-//   {
-//     name2: 7.6,
-//     uv: 3490,
-//   },
-// ];
 export default function Chart(props: { chartData: ChartDataType }) {
   const formattedChartData = useMemo(() => {
     return Object.entries(props.chartData).map(([dateString, amountObj]) => {
       return {
         dateString,
-        income: amountObj.income.toFixed(2),
-        expense: Math.abs(amountObj.expense).toFixed(2),
+        income: +amountObj.income.toFixed(2),
+        expense: +Math.abs(amountObj.expense).toFixed(2),
       };
     });
   }, [props.chartData]);
@@ -77,9 +61,7 @@ export default function Chart(props: { chartData: ChartDataType }) {
             <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
           </linearGradient>
         </defs>
-        {/* <CartesianGrid strokeDasharray="3 3" /> */}
         <XAxis
-          // type="number"
           tick={{ fontSize: 12 }}
           interval={"preserveStartEnd"}
           ticks={[
@@ -90,31 +72,19 @@ export default function Chart(props: { chartData: ChartDataType }) {
             return new Date(value).toLocaleString("en-US", {
               month: "short",
               day: "2-digit",
-              // year: "numeric",
             });
-
-            return value;
           }}
-          // display="none"
           dataKey={"dateString"}
-          // tickFormatter={(v: number) => new Date(v * 1000).toISOString()}
-          // domain={[(min: number) => min, (max: number) => max]}
         />
         <YAxis hide domain={[(min: number) => min * 0.9, (max: number) => max * 1.1]} />
-        <Tooltip
-        // labelFormatter={(label: any, payload: any) => {
-        //   // console.log("payload: ", payload);
-        //   // console.log("label: ", label);
-        //   return `label: ${new Date(label * 1000).toISOString()}`;
-        // }}
-        />
+        <Tooltip content={<CustomTooltip />} />
+        <Legend layout="horizontal" verticalAlign="top" align="left" />
         <Area
           connectNulls
-          // data={data1}
           type="monotone"
           dataKey="income"
           stroke="#8884d8"
-          // fill="#8884d8"
+          // fill="#242424"
           fill="url(#colorUv)"
           // animationBegin={}
           animationDuration={1000}
@@ -137,3 +107,25 @@ export default function Chart(props: { chartData: ChartDataType }) {
     </ResponsiveContainer>
   );
 }
+
+const TooltipContainer = styled.div`
+  /* background-color: #4b3062; */
+  background-color: #f4f4f4;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-radius: 10px;
+  color: black;
+  font-weight: bold;
+  .income {
+    color: #9007ff;
+  }
+  .expense {
+    color: #21bb4f;
+  }
+  .label {
+    font-weight: normal;
+    font-size: 14px;
+  }
+`;

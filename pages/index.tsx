@@ -12,29 +12,22 @@ export const getServerSideProps: GetServerSidePropsType<{ data: string }> = asyn
 };
 
 export default function Home() {
-  const [transactionData, setTransactionData] = useState<TransActionData[]>();
+  // const [transactionData, setTransactionData] = useState<TransActionData[]>();
   const [transactionListData, setTransactionListData] = useState<TransActionData[]>();
-
+  const [isListLoading, setIsListLoading] = useState(true);
   useEffect(() => {
     (async () => {
-      const [res, res2] = await Promise.all([
-        axios.get("/api/mock-transactions"),
-        axios.get("/api/transactions"),
-      ]);
-      setTransactionData(res.data.data);
-      setTransactionListData(res2.data.data);
+      const res = await axios.get("/api/transactions");
+      setTransactionListData(res.data.data);
+      setIsListLoading(false);
     })();
   }, []);
 
   return (
     <div>
       {" "}
-      {transactionData ? (
-        <>
-          <TransactionChart transactionData={transactionData} />
-          <RecentList transactionData={transactionListData} />
-        </>
-      ) : null}{" "}
+      <TransactionChart />
+      <RecentList />
     </div>
   );
 }

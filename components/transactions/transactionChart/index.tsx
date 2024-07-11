@@ -1,3 +1,4 @@
+import { LoadingIcon } from "@/components/common";
 import { ChartDataType, TransActionChartFilterType, TransActionData } from "@/types";
 import axios from "axios";
 import { useEffect, useMemo, useState } from "react";
@@ -5,9 +6,7 @@ import styled from "styled-components";
 import Chart from "./Chart";
 import ChartFilter from "./ChartFilter";
 
-export default function TransactionChart(props: { transactionData: TransActionData[] }) {
-  const [filteredChartData, setFilteredChartData] = useState(null);
-
+export default function TransactionChart() {
   const [chartData, setChartData] = useState<ChartDataType>(null);
   const [chartFilterValue, setChartFilterValue] = useState<TransActionChartFilterType>("month");
   const filterValueDayCountObj: { [key in TransActionChartFilterType]: number } = {
@@ -25,17 +24,15 @@ export default function TransactionChart(props: { transactionData: TransActionDa
       setChartData(res.data.data);
     })();
   }, [chartFilterValue]);
-
   return (
     <TransactionChartSectionContainer>
-      <ChartFilter
-        chartFilterValue={chartFilterValue}
-        setChartFilterValue={setChartFilterValue}
-        // originalTransactionData={props.transactionData}
-        // setFilterdTransactionData={setFilteredChartData}
-      />
+      <ChartFilter chartFilterValue={chartFilterValue} setChartFilterValue={setChartFilterValue} />
       <div className="chart-area">
-        {chartData && !isChartDataLoading ? <Chart chartData={chartData} /> : null}
+        {!chartData || isChartDataLoading ? (
+          <LoadingIcon className="chart-loading" />
+        ) : (
+          <Chart chartData={chartData} />
+        )}
       </div>
     </TransactionChartSectionContainer>
   );
@@ -44,9 +41,16 @@ export default function TransactionChart(props: { transactionData: TransActionDa
 const TransactionChartSectionContainer = styled.section`
   display: flex;
   flex-direction: column;
+  position: relative;
   gap: 15px;
   .chart-area {
     height: 250px;
+    .chart-loading {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
   }
   .recharts-cartesian-axis-line,
   .recharts-cartesian-axis-tick-line {
