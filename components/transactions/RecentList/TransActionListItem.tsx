@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Image from "next/image";
-import { formatAmount, capitalizeFirstLetter } from "@/utils";
+import { formatAmount, capitalizeFirstLetter, isSameDate } from "@/utils";
 
 const TransActionListItem = (props: {
   imgSrc: string;
@@ -10,6 +10,8 @@ const TransActionListItem = (props: {
   time: Date;
   transactionName: string;
 }) => {
+  const now = new Date("2024-10-31T23:59:59Z"); // TODO 실데이터반영시 수정필요
+
   return (
     <TransActionListItemContainer>
       <div className="img-box">
@@ -25,12 +27,31 @@ const TransActionListItem = (props: {
       </div>
       <div className="amount-and-time">
         <div className="amount">{formatAmount(props.amount)}</div>
-        <div className="time">{new Date(props.time).toLocaleTimeString()}</div>
+        <div className="time">
+          {new Date(props.time).toLocaleString(
+            "en-US",
+            isSameDate([new Date(props.time), now])
+              ? {
+                  hour: "numeric",
+                  minute: "2-digit",
+                  hour12: true,
+                }
+              : {
+                  month: "short",
+                  day: "2-digit",
+                }
+          )}
+        </div>
       </div>
     </TransActionListItemContainer>
   );
 };
 
+// {now.toLocaleString("en-US", {
+//   month: "short",
+//   day: "2-digit",
+//   year: "numeric",
+// })}
 export default TransActionListItem;
 
 const TransActionListItemContainer = styled.li`
@@ -39,6 +60,8 @@ const TransActionListItemContainer = styled.li`
   align-items: center;
   gap: 20px;
   .img-box {
+    width: 45px;
+    height: 45px;
     .no-img {
       width: 45px;
       height: 45px;
@@ -57,6 +80,7 @@ const TransActionListItemContainer = styled.li`
 
     .name {
       font-weight: bold;
+      font-size: 14px;
     }
     .type {
       font-size: 14px;
@@ -70,11 +94,13 @@ const TransActionListItemContainer = styled.li`
     justify-content: space-between;
     gap: 10px;
     align-items: flex-end;
+    width: 80px;
     .amount {
       font-weight: bold;
+      font-size: 14px;
     }
     .time {
-      font-size: 14px;
+      font-size: 12px;
       color: #909090;
     }
   }

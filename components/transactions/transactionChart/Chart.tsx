@@ -49,7 +49,6 @@ const CustomTooltip = ({ active, payload, label }) => {
 export default function Chart(props: { chartData: ChartDataType }) {
   const formattedChartData = useMemo(() => {
     return Object.entries(props.chartData).map(([dateString, amountObj]) => {
-      console.log("dateString: ", dateString);
       return {
         dateString,
         income: amountObj.income.toFixed(2),

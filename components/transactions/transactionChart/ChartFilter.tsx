@@ -63,7 +63,6 @@ export default function ChartFilter(props: {
                   {now.toLocaleString("en-US", {
                     month: "short",
                     day: "2-digit",
-
                     year: "numeric",
                   })}
                 </div>

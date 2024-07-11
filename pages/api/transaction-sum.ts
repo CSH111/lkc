@@ -26,6 +26,5 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<any>) 
     .forEach((key) => {
       reversedResult[key] = apiResultData[key];
     });
-  console.log("reversedResult: ", reversedResult);
   res.status(200).json({ data: reversedResult });
 }
